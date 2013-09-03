@@ -33,7 +33,7 @@ TopoJSON is a [JSON](http://json.org/) format for encoding geographic data struc
 
 ### 1.1. Examples
 
-A TopoJSON topology containing a single example object, a collection of geometries:
+A TopoJSON topology containing a single object named “example”, itself a geometry collection:
 
 ```json
 {
@@ -87,7 +87,7 @@ The same topology, quantized with Q = 10,000:
     "translate": [100, 0]
   },
   "objects": {
-    "stdin": {
+    "example": {
       "type": "GeometryCollection",
       "geometries": [
         {
