@@ -15,16 +15,16 @@ __Contents__
     * 1.2. Definitions
   * 2\. TopoJSON Objects
     * 2.1. Topology Objects
-      * 2.1.1. Arcs
+      * 2.1.1. Positions
+      * 2.1.2. Arcs
     * 2.2. Geometry Objects
-      * 2.2.1. Positions
-      * 2.2.2. Point
-      * 2.2.3. MultiPoint
-      * 2.2.4. LineString
-      * 2.2.5. MultiLineString
-      * 2.2.6. Polygon
-      * 2.2.7. MultiPolygon
-      * 2.2.8. Geometry Collection
+      * 2.2.1. Point
+      * 2.2.2. MultiPoint
+      * 2.2.3. LineString
+      * 2.2.4. MultiLineString
+      * 2.2.5. Polygon
+      * 2.2.6. MultiPolygon
+      * 2.2.7. Geometry Collection
   * 3\. Bounding Boxes
 
 ## 1. Introduction
