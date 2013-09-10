@@ -140,7 +140,7 @@ All floating point numbers must be treated as double precision floats and all in
 TopoJSON always consists of a single topology object. A topology may contain any number of named geometry objects. The term “TopoJSON object” may refer to either a topology or a geometry object it contains.
 
   * A TopoJSON object may have any number of members (name/value pairs).
-  * A TopoJSON object must have a member with the name “type”. This member’s value is a string that determines the type of the GeoJSON object.
+  * A TopoJSON object must have a member with the name “type”. This member’s value is a string that determines the type of the TopoJSON object.
   * The value of the type member must be one of: “Topology”, “Point”, “MultiPoint”, “LineString”, “MultiLineString”, “Polygon”, “MultiPolygon” or “GeometryCollection”. The case of the type member values must be as shown here.
   * A TopoJSON object may have a ”bbox” member, the value of which must be a bounding box array.
 
