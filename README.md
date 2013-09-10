@@ -16,9 +16,9 @@ __Contents__
   * 2\. TopoJSON Objects
     * 2.1. Topology Objects
       * 2.1.1. Positions
-      * 2.1.2. Arcs
-      * 2.1.3. Objects
-      * 2.1.4. Transform
+      * 2.1.2. Transforms
+      * 2.1.3. Arcs
+      * 2.1.4. Objects
     * 2.2. Geometry Objects
       * 2.2.1. Point
       * 2.2.2. MultiPoint
@@ -139,91 +139,107 @@ TopoJSON geometries may be quantized, is it is then a quantization value must be
 
 ## 2. TopoJSON Objects
 
-TopooJSON always consists of a single Topology object. This object (referred to as the Topology object below) represents a topology of a geometry, a feature, or a collection of features.
+TopooJSON always consists of a single topology object of type “Topology”. A topology may contain any number of named geometry objects. The term “TopoJSON object” may refer to either a topology or a geometry object it contains.
 
-- The TopooJSON object may have any number of members (name/value pairs).
-- The TopooJSON object must have a member with the name "type" and value 'Topology'.
-- The TopoJSON object must have a member with the name "arcs", see 2.1.2.
-- The TopoJSON object may have a member with the name "transform", see 2.1.4.
-- The TopoJSON object must have a member with the name "objects", see 2.1,3.
-- The TopoJSON object may have a "bbox" member, the value of which must be a bounding box array (see 3. Bounding Boxes).
+  * A TopooJSON object may have any number of members (name/value pairs).
+  * A TopooJSON object must have a member with the name “type”. This member’s value is a string that determines the type of the GeoJSON object.
+  * The value of the type member must be one of: “Topology”, “Point”, “MultiPoint”, “LineString”, “MultiLineString”, “Polygon”, “MultiPolygon” or “GeometryCollection”. The case of the type member values must be as shown here.
+  * A TopoJSON object may have a ”bbox” member, the value of which must be a bounding box array.
 
 ### 2.1. Topology Objects
 
+A topology is a TopoJSON object where the type member's value is “Topology”.
+
+  * A topology must have a member with the name “type” whose value is “Topology”.
+  * A topology must have a member with the name “objects” whose value is another object, each of which is a named geometry object.
+  * A topology must have a member with the name “arcs” whose value is an array of arcs.
+  * A topology may have a “transform” member, the value of which must be a transform.
+  * A topology may have a ”bbox” member, the value of which must be a bounding box array.
+
 #### 2.1.1. Positions
 
-A position is the fundamental geometry construct. The "coordinates" member of a Point object is composed of one position while the "coordinates" member or a  MultiPoint object and arc objects are composed of arrays of positions.
+A position is represented by an array of numbers. There must be at least two elements, and may be more. The order of elements are recommended to follow _x_, _y_, _z_ order (easting, northing, altitude for coordinates in a projected coordinate reference system, or longitude, latitude, altitude for coordinates in a geographic coordinate reference system). Any number of additional elements are allowed — interpretation and meaning of additional elements is beyond the scope of this specification.
 
-A position is represented by an array of numbers. There MUST be at least two elements, and MAY be more. All positions in the topology MUST have the same number of elements. The order of elements is beyond the scope of this specification.
+The “coordinates” member of a geometry object of type “Point” is composed of one position, and an array of positions for type “MultiPoint”. The “arcs” member of a topology is likewise an array of arrays of positions; however, note that positions must be delta-encoded for a topology with a “transform” member.
 
-If the topology is quantized (see 2.1.3) the array elements MUST be transformed integers, otherwise they may be integers or floats.
+#### 2.1.2. Transform
 
-Positions are transformed from their raw position by subtracting each member of the 'transform' members 'translate' member from each member of the position. Each member of the result is divided by the 'scale' member of the 'translate' member.
+A topology may have a “transform“ member, making it a quantized topology wherein all _x_ and _y_ position elements must be defined as integers.
 
-#### 2.1.2. Arcs
+  * A transform must have a member with the name “scale” whose value is a two-element array of numbers.
+  * A transform must have a member with the name “translate” whose value is a two-element array of numbers.
 
-The 'arcs' member of the TopoJSON object is an array consisting of one or more arrays each of which contains one or more positions.
+Positions must be transformed by first multiplying by the transform’s scale and then adding the transform’s translate.
 
-If the topology is quantized (see 2.1.3) the array elements MUST be delta encoded. Instead of encoding the position they represent with the absolute coordinates of that position, the element represents the difference between it and the previous position.  The first position represents the difference between it and the origin.
+#### 2.1.3. Arcs
 
-#### 2.1.3 Objects
+A topology must have an “arcs” member whose value is an array of arrays of positions. Each arc must be an array of two or more positions.
 
-The 'objects' member of the topology is a JSON object, the values it contains are TopoJSON geometry objects (see 2.2).
+If the topology has a transform, the positions of each arc must be delta-encoded. The first position of the arc is a normal position [_x₁_, _y₁_]. The second position [_x₂_, _y₂_] is encoded as [_Δx₂_, _Δy₂_], where _x₂_ = _x₁_ + _Δx₂_ and _y₂_ = _y₁_ + _Δy₂_. The third position [_x₃_, _y₃_] is encoded as [_Δx₃_, _Δy₃_], where _x₃_ = _x₂_ + _Δx₃_ and _y₃_ = _y₂_ + _Δy₃_ and so on.
 
-#### 2.1.4 Transform
+The following JavaScript reference implementation decodes a single arc from the given quantized topology:
 
-The 'transform' member of the TopoJSON object is a JSON object (transform object),
+```js
+function decodeArc(topology, arc) {
+  var x = 0,
+      y = 0;
+  return arc.map(function(point) {
+    x += point[0];
+    y += point[1];
+    return [
+      x * topology.transform.scale[0] + topology.transform.translate[0],
+      y * topology.transform.scale[1] + topology.transform.translate[1]
+    ];
+  });
+}
+```
 
-The transform object MUST contain a 'translate' member with a value of an array of length equal to the length of the positions, each member being the minimum value on that axis.
+A geometry object consisting of LineStrings or LinearRings (LineString, MultiLineString, Polygon or MultiPolygon) must be constructed from arcs, referenced by index into the containing topology’s arcs array. A zero-based index is used: 0 refers to the first arc, 1 refers to the second arc, and so on. A negative index indicates that the referenced arc must be reversed to reconstruct the geometry. A negative arc index refers to the reverse of arc at the ones’ complement of the negative index: -1 refers to the reversed first arc, -2 refers to the reversed second arc, and so on.
 
-The transform object MUST contain a 'scale' member with a value of an array of length equal to the length of the positions. The scale values can be calculated as the inverse of the quantization value minus 1 divided by the range of the axis or 1/(q-1/max-min), unless this would result in an undefined mathematical operation or a value of 0, in which case the value is 1.
+If more than one arc is referenced to construct a LineString or LinearRing, the first position of a subsequent arc must be equal to the last position of the previous arc. Then, when reconstructing the geometry, the first position of each arc except the first may be dropped; equivalently, the last position of each arc except the last may be dropped.
+
+#### 2.1.4. Objects
+
+A topology must have an “objects” member whose value is an object. This object may have any number of members, whose value must be a geometry object.
 
 ### 2.2. Geometry Objects
 
-A TopoJSON geometry object is a JSON object which must have a member 'type' the type member's value is one of the following strings: "Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon", or "GeometryCollection".
+A geometry is a TopoJSON object where the type member’s value is one of the following strings: “Point”, “MultiPoint”, “LineString”, “MultiLineString”, “Polygon”, “MultiPolygon”, or “GeometryCollection”.
 
-A TopoJSON geometry object of type other "Point" or "MultiPoint" must have a member with the name "coordinates".
+A TopoJSON geometry object of type “Point” or “MultiPoint” must have a member with the name “coordinates”. A TopoJSON geometry object of type “LineString”, “MultiLineString”, “Polygon”, or “MultiPolygon” must have a member with the name “arcs”. The value of the arcs and coordinates members is always an array. The structure for the elements in this array is determined by the type of geometry.
 
-A TopoJSON geometry object of type "LineString", "MultiLineString", "Polygon", or "MultiPolygon" must have a member with the name "arcs".
+If a geometry has a commonly used identifier, that identifier should be included as a member of the geometry object with the name “id”. A geometry object may have a member with the name “properties”. The value of the properties member is an object (any JSON object or a JSON null value).
 
-The value of the coordinates and arcs member is always an array. The structure for the elements in this array is determined by the type of geometry.
+#### 2.2.1. Point
 
-A TopoJSON geometry object MAY have the member 'id' which MUST be unique across the topology.
-
-A TopoJSON geometry object may have a member with the name "properties". The value of the properties member is an object (any JSON object or a JSON null value).
-
-#### 2.2.1 Point
-
-For type "Point", it must contain a "coordinates" member which must be a single position.
+For type “Point”, the “coordinates” member must be a single position.
 
 #### 2.2.2. MultiPoint
 
-For type "MultiPoint", it must contain a "coordinates" member which must be an array of position.
+For type “MultiPoint”, the “coordinates” member must be an array of positions.
 
 #### 2.2.3. LineString
 
-For type "LineString", it must contain an "arcs" member which must contains an 'LinearArc', of integers. Each integer if positive is the value of the position of the corresponding arc in that array (0 index), if negative this denotes that the arc should be stitched backward and the index can be calculated by taking the ones' complement (binary inverse). The arcs are stitching together to form     the LinearArc, the last coordinate of the arc must be the same as the first coordinate of the subsequent arc, if any. The LinearArc MUST have at least 2 distinct positions.
-
-An ArcRing is a closed LinearArc with 4 or more positions. The first and last positions are equivalent (they represent equivalent points). Though a ArcRing is not explicitly represented as a GeoJSON geometry type, it is referred to in the Polygon geometry type definition.
+For type “LineString”, the “arcs” member must be an array of arc indexes.
 
 #### 2.2.4. MultiLineString
 
-For type "MultiLineString", it must contain an "arcs" member which must contains an array of LinearArcs.
+For type “LineString”, the “arcs” member must be an array of LineString arc indexes.
 
 #### 2.2.5. Polygon
 
-For type "Polygon", the "arcs" member must be an array of ArcRing coordinate arrays. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
+For type “Polygon”, the “arcs” member must be an array of LinearRing arc indexes. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
 
 #### 2.2.6. MultiPolygon
 
-For type "MultiPolygon", the "arcs" member must be an array of Polygon arc arrays.
+For type “MultiPolygon”, the “arcs” member must be an array of Polygon arc indexes.
 
 #### 2.2.7. Geometry Collection
 
-A TopoJSON object with type "GeometryCollection" is a geometry object which represents a collection of geometry objects.
+A TopoJSON object with type “GeometryCollection” is a geometry object which represents a collection of geometry objects.
 
-A geometry collection must have a member with the name "geometries". The value corresponding to "geometries" is an array. Each element in this array is a TopoJSON geometry object.
+A geometry collection must have a member with the name “geometries” whose value is an array. Each element in this array is a TopoJSON geometry object.
 
 ## 3. Bounding Boxes
 
-To include information on the coordinate range for a topology a TopoJSON object may have a member named "bbox". The value of the bbox member must be a 2*n array where n is the number of dimensions represented in the contained geometries, with the lowest values for all axes followed by the highest values. The axes order of a bbox follows the axes order of geometries.
+To include information on the coordinate range for a topology or geometry a TopoJSON object may have a member named “bbox”. The value of the bbox member must be a 2*<i>n</i> array where _n_ is the number of dimensions represented in the contained geometries, with the lowest values for all axes followed by the highest values. The axes order of a bbox follows the axes order of geometries. The bounding box should not be transformed using the topology’s transform, if any.
