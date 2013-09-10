@@ -133,9 +133,7 @@ JavaScript Object Notation (JSON), and the terms “object”, “name”, “va
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [IETF RFC 2119](http://www.ietf.org/rfc/rfc2119.txt).
 
-All floating point numbers MUST be treated as double precision floats and all integers must be 32 bit signed integers.
-
-TopoJSON geometries may be quantized, is it is then a quantization value must be selected, this value is the minimum difference along an axis between 2 points.
+All floating point numbers must be treated as double precision floats and all integers must be 32-bit signed integers.
 
 ## 2. TopoJSON Objects
 
