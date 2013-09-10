@@ -150,8 +150,8 @@ A topology is a TopoJSON object where the type member's value is “Topology”.
 
   * A topology must have a member with the name “objects” whose value is another object, each of which is a named geometry object.
   * A topology must have a member with the name “arcs” whose value is an array of arcs.
-  * A topology may have a “transform” member, the value of which must be a transform.
-  * A topology may have a “bbox” member, the value of which must be a bounding box array.
+  * A topology may have a “transform” member, whose value must be a transform.
+  * A topology may have a “bbox” member, whose value must be a bounding box array.
 
 #### 2.1.1. Positions
 
