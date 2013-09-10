@@ -148,7 +148,6 @@ TopoJSON always consists of a single topology object. A topology may contain any
 
 A topology is a TopoJSON object where the type member's value is “Topology”.
 
-  * A topology must have a member with the name “type” whose value is “Topology”.
   * A topology must have a member with the name “objects” whose value is another object, each of which is a named geometry object.
   * A topology must have a member with the name “arcs” whose value is an array of arcs.
   * A topology may have a “transform” member, the value of which must be a transform.
