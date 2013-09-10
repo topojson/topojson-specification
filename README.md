@@ -157,22 +157,20 @@ A topology is a TopoJSON object where the type member's value is “Topology”.
 
 A position is represented by an array of numbers. There must be at least two elements, and may be more. The order of elements are recommended to follow _x_, _y_, _z_ order (easting, northing, altitude for coordinates in a projected coordinate reference system, or longitude, latitude, altitude for coordinates in a geographic coordinate reference system). Any number of additional elements are allowed — interpretation and meaning of additional elements is beyond the scope of this specification.
 
-The “coordinates” member of a geometry object of type “Point” is composed of one position, and an array of positions for type “MultiPoint”. The “arcs” member of a topology is likewise an array of arrays of positions; however, note that positions must be delta-encoded for a topology with a “transform” member.
-
 #### 2.1.2. Transform
 
-A topology may have a “transform“ member, making it a quantized topology wherein all _x_ and _y_ position elements must be defined as integers.
+A topology may have a “transform“ member.
 
   * A transform must have a member with the name “scale” whose value is a two-element array of numbers.
   * A transform must have a member with the name “translate” whose value is a two-element array of numbers.
 
-Positions must be transformed by first multiplying by the transform’s scale and then adding the transform’s translate.
+If a topology has a transform, it is a quantized topology wherein all _x_ and _y_ position elements must be defined as integers. Positions must be transformed by first multiplying by the transform’s scale and then adding the transform’s translate.
 
 #### 2.1.3. Arcs
 
 A topology must have an “arcs” member whose value is an array of arrays of positions. Each arc must be an array of two or more positions.
 
-If the topology has a transform, the positions of each arc must be delta-encoded. The first position of the arc is a normal position [_x₁_, _y₁_]. The second position [_x₂_, _y₂_] is encoded as [_Δx₂_, _Δy₂_], where _x₂_ = _x₁_ + _Δx₂_ and _y₂_ = _y₁_ + _Δy₂_. The third position [_x₃_, _y₃_] is encoded as [_Δx₃_, _Δy₃_], where _x₃_ = _x₂_ + _Δx₃_ and _y₃_ = _y₂_ + _Δy₃_ and so on.
+If a topology has a transform, the positions of each arc in the topology must be delta-encoded. The first position of the arc is a normal position [<i>x₁</i>, <i>y₁</i>]. The second position [<i>x₂</i>, <i>y₂</i>] is encoded as [<i>Δx₂</i>, <i>Δy₂</i>], where <i>x₂</i> = <i>x₁</i> + <i>Δx₂</i> and <i>y₂</i> = <i>y₁</i> + <i>Δy₂</i>. The third position [<i>x₃</i>, <i>y₃</i>] is encoded as [<i>Δx₃</i>, <i>Δy₃</i>], where <i>x₃</i> = <i>x₂</i> + <i>Δx₃</i> and <i>y₃</i> = <i>y₂</i> + <i>Δy₃</i> and so on.
 
 The following JavaScript reference implementation decodes a single arc from the given quantized topology:
 
