@@ -225,7 +225,7 @@ For type “LineString”, the “arcs” member must be an array of LineString 
 
 For type “Polygon”, the “arcs” member must be an array of LinearRing arc indexes. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
 
-A LinearRing is closed LineString with 4 or more positions. The first and last positions are equivalent (they represent equivalent points). Though a LinearRing is not explicitly represented as a TopoJSON geometry type, it is referred to in the Polygon geometry type definition.
+A LinearRing is closed LineString with 4 or more positions. The first and last positions are equivalent (they represent equivalent points).
 
 #### 2.2.6. MultiPolygon
 
