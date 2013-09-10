@@ -142,7 +142,7 @@ TopoJSON always consists of a single topology object. A topology may contain any
   * A TopoJSON object may have any number of members (name/value pairs).
   * A TopoJSON object must have a member with the name “type”. This member’s value is a string that determines the type of the TopoJSON object.
   * The value of the type member must be one of: “Topology”, “Point”, “MultiPoint”, “LineString”, “MultiLineString”, “Polygon”, “MultiPolygon” or “GeometryCollection”. The case of the type member values must be as shown here.
-  * A TopoJSON object may have a ”bbox” member, the value of which must be a bounding box array.
+  * A TopoJSON object may have a “bbox” member, the value of which must be a bounding box array.
 
 ### 2.1. Topology Objects
 
@@ -152,7 +152,7 @@ A topology is a TopoJSON object where the type member's value is “Topology”.
   * A topology must have a member with the name “objects” whose value is another object, each of which is a named geometry object.
   * A topology must have a member with the name “arcs” whose value is an array of arcs.
   * A topology may have a “transform” member, the value of which must be a transform.
-  * A topology may have a ”bbox” member, the value of which must be a bounding box array.
+  * A topology may have a “bbox” member, the value of which must be a bounding box array.
 
 #### 2.1.1. Positions
 
