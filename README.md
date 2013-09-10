@@ -79,7 +79,7 @@ A TopoJSON topology containing a single object named “example”, itself a geo
 }
 ```
 
-The same topology, quantized with Q = 10,000:
+The same topology, quantized:
 
 ```json
 {
