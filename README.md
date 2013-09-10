@@ -162,16 +162,18 @@ A position is represented by an array of numbers. There must be at least two ele
 
 A topology may have a “transform“ member.
 
-  * A transform must have a member with the name “scale” whose value is a two-element array of numbers.
-  * A transform must have a member with the name “translate” whose value is a two-element array of numbers.
+  * A transform must have a member with the name “scale” whose value is a n-element array of numbers.
+  * A transform must have a member with the name “translate” whose value is a n-element array of numbers.
+ 
+Both the 'scale' and 'translate' members must be of the same length.
 
-If a topology has a transform, it is a quantized topology wherein all _x_ and _y_ position elements must be defined as integers. Positions must be transformed by first multiplying by the transform’s scale and then adding the transform’s translate.
+If a topology has a transform then its positions are quantized. For each index of the position it is defined as an integer by first multiplying by the value of transform's scale in the same index and then adding the value of transform's translate in the same index. If an index is present in a position but not the transform than the value at that index is not quantized.
 
 #### 2.1.3. Arcs
 
 A topology must have an “arcs” member whose value is an array of arrays of positions. Each arc must be an array of two or more positions.
 
-If a topology has a transform, the positions of each arc in the topology must be delta-encoded. The first position of the arc is a normal position [<i>x₁</i>, <i>y₁</i>]. The second position [<i>x₂</i>, <i>y₂</i>] is encoded as [<i>Δx₂</i>, <i>Δy₂</i>], where <i>x₂</i> = <i>x₁</i> + <i>Δx₂</i> and <i>y₂</i> = <i>y₁</i> + <i>Δy₂</i>. The third position [<i>x₃</i>, <i>y₃</i>] is encoded as [<i>Δx₃</i>, <i>Δy₃</i>], where <i>x₃</i> = <i>x₂</i> + <i>Δx₃</i> = <i>x₁</i> + <i>Δx₂</i> + <i>Δx₃</i> and <i>y₃</i> = <i>y₂</i> + <i>Δy₃</i> = <i>y₁</i> + <i>Δy₂</i> + <i>Δy₃</i> and so on.
+If a topology is quantized, the positions of each arc in the topology which are quantized must be delta-encoded. The first position of the arc is a normal position [<i>x₁</i>, <i>y₁</i>]. The second position [<i>x₂</i>, <i>y₂</i>] is encoded as [<i>Δx₂</i>, <i>Δy₂</i>], where <i>x₂</i> = <i>x₁</i> + <i>Δx₂</i> and <i>y₂</i> = <i>y₁</i> + <i>Δy₂</i>. The third position [<i>x₃</i>, <i>y₃</i>] is encoded as [<i>Δx₃</i>, <i>Δy₃</i>], where <i>x₃</i> = <i>x₂</i> + <i>Δx₃</i> = <i>x₁</i> + <i>Δx₂</i> + <i>Δx₃</i> and <i>y₃</i> = <i>y₂</i> + <i>Δy₃</i> = <i>y₁</i> + <i>Δy₂</i> + <i>Δy₃</i> and so on.
 
 The following JavaScript reference implementation decodes a single arc from the given quantized topology:
 
