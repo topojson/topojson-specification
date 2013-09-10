@@ -189,7 +189,7 @@ function decodeArc(topology, arc) {
 }
 ```
 
-A geometry object consisting of LineStrings or LinearRings (LineString, MultiLineString, Polygon or MultiPolygon) must be constructed from arcs, referenced by index into the containing topology’s arcs array. A zero-based index is used: 0 refers to the first arc, 1 refers to the second arc, and so on. A negative index indicates that the referenced arc must be reversed to reconstruct the geometry. A negative arc index refers to the reverse of arc at the ones’ complement of the negative index: -1 refers to the reversed first arc, -2 refers to the reversed second arc, and so on.
+A geometry object consisting of LineStrings (LineString or MultiLineString) or LinearRings (Polygon or MultiPolygon) must be constructed from arcs. Each arc must be referenced by index into the containing topology’s arcs array. The index must be zero-based: 0 refers to the first arc, 1 refers to the second arc, and so on. A negative index indicates that the arc at the ones’ complement of the negative index must be reversed to reconstruct the geometry: -1 refers to the reversed first arc, -2 refers to the reversed second arc, and so on.
 
 If more than one arc is referenced to construct a LineString or LinearRing, the first position of a subsequent arc must be equal to the last position of the previous arc. Then, when reconstructing the geometry, the first position of each arc except the first may be dropped; equivalently, the last position of each arc except the last may be dropped.
 
@@ -224,6 +224,8 @@ For type “LineString”, the “arcs” member must be an array of LineString 
 #### 2.2.5. Polygon
 
 For type “Polygon”, the “arcs” member must be an array of LinearRing arc indexes. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
+
+A LinearRing is closed LineString with 4 or more positions. The first and last positions are equivalent (they represent equivalent points). Though a LinearRing is not explicitly represented as a TopoJSON geometry type, it is referred to in the Polygon geometry type definition.
 
 #### 2.2.6. MultiPolygon
 
