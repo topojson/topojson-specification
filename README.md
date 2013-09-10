@@ -170,7 +170,7 @@ If a topology has a transform, it is a quantized topology wherein all _x_ and _y
 
 A topology must have an “arcs” member whose value is an array of arrays of positions. Each arc must be an array of two or more positions.
 
-If a topology has a transform, the positions of each arc in the topology must be delta-encoded. The first position of the arc is a normal position [<i>x₁</i>, <i>y₁</i>]. The second position [<i>x₂</i>, <i>y₂</i>] is encoded as [<i>Δx₂</i>, <i>Δy₂</i>], where <i>x₂</i> = <i>x₁</i> + <i>Δx₂</i> and <i>y₂</i> = <i>y₁</i> + <i>Δy₂</i>. The third position [<i>x₃</i>, <i>y₃</i>] is encoded as [<i>Δx₃</i>, <i>Δy₃</i>], where <i>x₃</i> = <i>x₂</i> + <i>Δx₃</i> and <i>y₃</i> = <i>y₂</i> + <i>Δy₃</i> and so on.
+If a topology has a transform, the positions of each arc in the topology must be delta-encoded. The first position of the arc is a normal position [<i>x₁</i>, <i>y₁</i>]. The second position [<i>x₂</i>, <i>y₂</i>] is encoded as [<i>Δx₂</i>, <i>Δy₂</i>], where <i>x₂</i> = <i>x₁</i> + <i>Δx₂</i> and <i>y₂</i> = <i>y₁</i> + <i>Δy₂</i>. The third position [<i>x₃</i>, <i>y₃</i>] is encoded as [<i>Δx₃</i>, <i>Δy₃</i>], where <i>x₃</i> = <i>x₂</i> + <i>Δx₃</i> = <i>x₁</i> + <i>Δx₂</i> + <i>Δx₃</i> and <i>y₃</i> = <i>y₂</i> + <i>Δy₃</i> = <i>y₁</i> + <i>Δy₂</i> + <i>Δy₃</i> and so on.
 
 The following JavaScript reference implementation decodes a single arc from the given quantized topology:
 
