@@ -158,7 +158,7 @@ A topology is a TopoJSON object where the type member's value is “Topology”.
 
 A position is represented by an array of numbers. There must be at least two elements, and may be more. The order of elements are recommended to follow _x_, _y_, _z_ order (easting, northing, altitude for coordinates in a projected coordinate reference system, or longitude, latitude, altitude for coordinates in a geographic coordinate reference system). Any number of additional elements are allowed — interpretation and meaning of additional elements is beyond the scope of this specification.
 
-#### 2.1.2. Transform
+#### 2.1.2. Transforms
 
 A topology may have a “transform“ member.
 
