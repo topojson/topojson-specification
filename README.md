@@ -18,7 +18,8 @@ __Contents__
       * 2.1.1. Positions
       * 2.1.2. Transforms
       * 2.1.3. Arcs
-      * 2.1.4. Objects
+      * 2.1.4. Arc Indexes
+      * 2.1.5. Objects
     * 2.2. Geometry Objects
       * 2.2.1. Point
       * 2.2.2. MultiPoint
@@ -189,11 +190,15 @@ function decodeArc(topology, arc) {
 }
 ```
 
-A geometry object consisting of LineStrings (LineString or MultiLineString) or LinearRings (Polygon or MultiPolygon) must be constructed from arcs. Each arc must be referenced by index into the containing topology’s arcs array. The index must be zero-based: 0 refers to the first arc, 1 refers to the second arc, and so on. A negative index indicates that the arc at the ones’ complement of the negative index must be reversed to reconstruct the geometry: -1 refers to the reversed first arc, -2 refers to the reversed second arc, and so on.
+#### 2.1.4. Arc Indexes
+
+A geometry object consisting of LineStrings (LineString or MultiLineString) or LinearRings (Polygon or MultiPolygon) must be constructed from arcs. Each arc must be referenced by numeric zero-based index into the containing topology’s arcs array. For example, 0 refers to the first arc, 1 refers to the second arc, and so on.
+
+A negative arc index indicates that the arc at the ones’ complement of the index must be reversed to reconstruct the geometry: -1 refers to the reversed first arc, -2 refers to the reversed second arc, and so on.
 
 If more than one arc is referenced to construct a LineString or LinearRing, the first position of a subsequent arc must be equal to the last position of the previous arc. Then, when reconstructing the geometry, the first position of each arc except the first may be dropped; equivalently, the last position of each arc except the last may be dropped.
 
-#### 2.1.4. Objects
+#### 2.1.5. Objects
 
 A topology must have an “objects” member whose value is an object. This object may have any number of members, whose value must be a geometry object.
 
