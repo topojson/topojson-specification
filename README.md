@@ -10,25 +10,25 @@ TopoJSON is a topological geospatial data interchange format based on GeoJSON.
 
 __Contents__
 
-  * 1\. Introduction
-    * 1.1. Examples
-    * 1.2. Definitions
-  * 2\. TopoJSON Objects
-    * 2.1. Topology Objects
-      * 2.1.1. Positions
-      * 2.1.2. Transforms
-      * 2.1.3. Arcs
-      * 2.1.4. Arc Indexes
-      * 2.1.5. Objects
-    * 2.2. Geometry Objects
-      * 2.2.1. Point
-      * 2.2.2. MultiPoint
-      * 2.2.3. LineString
-      * 2.2.4. MultiLineString
-      * 2.2.5. Polygon
-      * 2.2.6. MultiPolygon
-      * 2.2.7. Geometry Collection
-  * 3\. Bounding Boxes
+  * 1\. [Introduction](#1-introduction)
+    * 1.1. [Examples](#11-examples)
+    * 1.2. [Definitions](#12-definitions)
+  * 2\. [TopoJSON Objects](#2-topojson-objects)
+    * 2.1. [Topology Objects](#21-topology-objects)
+      * 2.1.1. [Positions](#211-positions)
+      * 2.1.2. [Transforms](#212-transforms)
+      * 2.1.3. [Arcs](#213-arcs)
+      * 2.1.4. [Arc Indexes](#214-arc-indexes)
+      * 2.1.5. [Objects](#215-objects)
+    * 2.2. [Geometry Objects](#22-geometry-objects)
+      * 2.2.1. [Point](#221-point)
+      * 2.2.2. [MultiPoint](#222-multipoint)
+      * 2.2.3. [LineString](#223-linestring)
+      * 2.2.4. [MultiLineString](#224-multilinestring)
+      * 2.2.5. [Polygon](#225-polygon)
+      * 2.2.6. [MultiPolygon](#226-multipolygon)
+      * 2.2.7. [Geometry Collection](#227-geometry-collection)
+  * 3\. [Bounding Boxes](#3-bounding-boxes)
 
 ## 1. Introduction
 
