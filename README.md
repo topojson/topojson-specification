@@ -195,15 +195,12 @@ The following JavaScript reference implementation decodes a single delta-encoded
 
 ```js
 function decodeArc(topology, arc) {
-  var x = 0,
-      y = 0;
+  var x = 0, y = 0;
   return arc.map(function(point) {
-    x += point[0];
-    y += point[1];
-    return [
-      x * topology.transform.scale[0] + topology.transform.translate[0],
-      y * topology.transform.scale[1] + topology.transform.translate[1]
-    ];
+    point = point.slice();
+    point[0] = (x += point[0]) * topology.transform.scale[0] + topology.transform.translate[0];
+    point[1] = (y += point[1]) * topology.transform.scale[1] + topology.transform.translate[1];
+    return point;
   });
 }
 ```
