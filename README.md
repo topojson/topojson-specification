@@ -162,26 +162,28 @@ A position is represented by an array of numbers. There must be at least two ele
 
 A topology may have a “transform” member whose value is a transform object. The purpose of the transform is to quantize positions for more efficient serialization, by representing positions as integers rather than floats.
 
-  * A transform must have a member with the name “scale” whose value is a _n_-element array of numbers.
-  * A transform must have a member with the name “translate” whose value is a _n_-element array of numbers.
+  * A transform must have a member with the name “scale” whose value is a two-element array of numbers.
+  * A transform must have a member with the name “translate” whose value is a two-element array of numbers.
 
-Both the “scale” and “translate” members must be of length _n_, where _n_ is the number of quantized dimensions in the topology’s positions. _n_ must be at least two. Every position in the topology must be quantized, with the leading _n_ elements in each position an integer.
+Both the “scale” and “translate” members must be of length two. Every position in the topology must be quantized, with the first and second elements in each position an integer.
 
 To transform from a quantized position to an absolute position:
 
-  1. Multiply the quantized position element by the corresponding scale element.
+  1. Multiply each quantized position element by the corresponding scale element.
   2. Add the corresponding translate element.
 
-The following JavaScript reference implementation transforms a single two-dimensional position from the given quantized topology:
+The following JavaScript reference implementation transforms a single position from the given quantized topology to absolute coordinates:
 
 ```js
 function transformPoint(topology, position) {
-  return [
-    position[0] * topology.transform.scale[0] + topology.transform.translate[0],
-    position[1] * topology.transform.scale[1] + topology.transform.translate[1]
-  ];
+  position = position.slice();
+  position[0] = position[0] * topology.transform.scale[0] + topology.transform.translate[0],
+  position[1] = position[1] * topology.transform.scale[1] + topology.transform.translate[1]
+  return position;
 }
 ```
+
+Note that by copying the input position, the reference implementation preserves any additional dimensions (such as _z_) without transforming them.
 
 #### 2.1.3. Arcs
 
