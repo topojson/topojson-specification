@@ -160,14 +160,28 @@ A position is represented by an array of numbers. There must be at least two ele
 
 #### 2.1.2. Transforms
 
-A topology may have a “transform“ member.
+A topology may have a “transform” member whose value is a transform object. The purpose of the transform is to quantize positions for more efficient serialization, by representing positions as integers rather than floats.
 
-  * A transform must have a member with the name “scale” whose value is a n-element array of numbers.
-  * A transform must have a member with the name “translate” whose value is a n-element array of numbers.
- 
-Both the 'scale' and 'translate' members must be of the same length.
+  * A transform must have a member with the name “scale” whose value is a _n_-element array of numbers.
+  * A transform must have a member with the name “translate” whose value is a _n_-element array of numbers.
 
-If a topology has a transform then its positions are quantized. For each index of the position it is defined as an integer by first multiplying by the value of transform's scale in the same index and then adding the value of transform's translate in the same index. If an index is present in a position but not the transform than the value at that index is not quantized.
+Both the “scale” and “translate” members must be of length _n_, where _n_ is the number of quantized dimensions in the topology’s positions. _n_ must be at least two. Every position in the topology must be quantized, with the leading _n_ elements in each position an integer.
+
+To transform from a quantized position to an absolute position:
+
+  1. Multiply the quantized position element by the corresponding scale element.
+  2. Add the corresponding translate element.
+
+The following JavaScript reference implementation transforms a single two-dimensional position from the given quantized topology:
+
+```js
+function transformPoint(topology, position) {
+  return [
+    position[0] * topology.transform.scale[0] + topology.transform.translate[0],
+    position[1] * topology.transform.scale[1] + topology.transform.translate[1]
+  ];
+}
+```
 
 #### 2.1.3. Arcs
 
@@ -175,7 +189,7 @@ A topology must have an “arcs” member whose value is an array of arrays of p
 
 If a topology is quantized, the positions of each arc in the topology which are quantized must be delta-encoded. The first position of the arc is a normal position [<i>x₁</i>, <i>y₁</i>]. The second position [<i>x₂</i>, <i>y₂</i>] is encoded as [<i>Δx₂</i>, <i>Δy₂</i>], where <i>x₂</i> = <i>x₁</i> + <i>Δx₂</i> and <i>y₂</i> = <i>y₁</i> + <i>Δy₂</i>. The third position [<i>x₃</i>, <i>y₃</i>] is encoded as [<i>Δx₃</i>, <i>Δy₃</i>], where <i>x₃</i> = <i>x₂</i> + <i>Δx₃</i> = <i>x₁</i> + <i>Δx₂</i> + <i>Δx₃</i> and <i>y₃</i> = <i>y₂</i> + <i>Δy₃</i> = <i>y₁</i> + <i>Δy₂</i> + <i>Δy₃</i> and so on.
 
-The following JavaScript reference implementation decodes a single arc from the given quantized topology:
+The following JavaScript reference implementation decodes a single delta-encoded quantized arc from the given quantized topology:
 
 ```js
 function decodeArc(topology, arc) {
