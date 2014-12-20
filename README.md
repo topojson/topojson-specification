@@ -68,7 +68,7 @@ A TopoJSON topology containing a single object named “example”, itself a geo
               "this": "that"
             }
           },
-          "arcs": [[-2]]
+          "arcs": [[-1]]
         }
       ]
     }
