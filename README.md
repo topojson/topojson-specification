@@ -239,7 +239,7 @@ For type “LineString”, the “arcs” member must be an array of arc indexes
 
 #### 2.2.4. MultiLineString
 
-For type “LineString”, the “arcs” member must be an array of LineString arc indexes.
+For type “MultiLineString”, the “arcs” member must be an array of LineString arc indexes.
 
 #### 2.2.5. Polygon
 
