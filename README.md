@@ -32,7 +32,7 @@ __Contents__
 
 ## 1. Introduction
 
-TopoJSON is a [JSON](http://json.org/) format for encoding geographic data structures into a shared topology. A TopoJSON topology represents one or geometries that share sequences of positions called _arcs_. TopoJSON, as an extension of [GeoJSON](http://geojson.org/), supports multiple geometry types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Geometries in TopoJSON may contain additional properties to encode non-geometrical data.
+TopoJSON is a [JSON](http://json.org/) format for encoding geographic data structures into a shared topology. A TopoJSON topology represents one or more geometries that share sequences of positions called _arcs_. TopoJSON, as an extension of [GeoJSON](http://geojson.org/), supports multiple geometry types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Geometries in TopoJSON may contain additional properties to encode non-geometrical data.
 
 ### 1.1. Examples
 
