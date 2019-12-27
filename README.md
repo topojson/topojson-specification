@@ -209,7 +209,7 @@ function decodeArc(topology, arc) {
 
 A geometry object consisting of LineStrings (LineString or MultiLineString) or LinearRings (Polygon or MultiPolygon) must be constructed from arcs. Each arc must be referenced by numeric zero-based index into the containing topology’s arcs array. For example, 0 refers to the first arc, 1 refers to the second arc, and so on.
 
-A negative arc index indicates that the arc at the ones’ complement of the index must be reversed to reconstruct the geometry: -1 refers to the reversed first arc, -2 refers to the reversed second arc, and so on. In JavaScript, you can negate a negative arc index `i` using the [bitwise NOT operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Bitwise_NOT), `~i`.
+A negative arc index indicates that the arc at the ones’ complement of the index must be reversed to reconstruct the geometry: -1 refers to the reversed first arc, -2 refers to the reversed second arc, and so on. In JavaScript, you can negate an arc index `i` using the [bitwise NOT operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Bitwise_NOT), `~i`.
 
 If more than one arc is referenced to construct a LineString or LinearRing, the first position of a subsequent arc must be equal to the last position of the previous arc. Then, when reconstructing the geometry, the first position of each arc except the first may be dropped; equivalently, the last position of each arc except the last may be dropped.
 
